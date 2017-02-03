@@ -6,12 +6,21 @@ use Bolt\Extension\SimpleExtension;
 
 class FooExtension extends SimpleExtension
 {
+    function __construct()
+    {
+
+    }
+
 
     /**
      * {@inheritdoc}
      */
     protected function registerTwigFunctions()
     {
+        // echo "Joe";
+        // $config = $this->getConfig();
+        // dump($config);
+
         return [
             'foo' => 'fooFunction',
             'bar' => ['barFunction', ['is_safe' => ['html']]]
@@ -34,7 +43,7 @@ class FooExtension extends SimpleExtension
      *
      * @return string
      */
-    public function koalaFunction()
+    public function fooFunction()
     {
         return $this->renderTemplate('koala.twig');
     }
@@ -46,7 +55,7 @@ class FooExtension extends SimpleExtension
      *
      * @return string
      */
-    public function koalaFilter($input)
+    public function fooFilter($input)
     {
         return strtolower($input);
     }
