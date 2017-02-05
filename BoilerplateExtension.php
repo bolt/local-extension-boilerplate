@@ -36,7 +36,7 @@ class BoilerplateExtension extends SimpleExtension
      */
     protected function registerMenuEntries()
     {
-        $menu = new MenuEntry('Boilerplate-menu', 'Boilerplate');
+        $menu = new MenuEntry('Boilerplate-menu', 'foo');
         $menu->setLabel('Boilerplate')
             ->setIcon('fa:leaf')
             ->setPermission('settings')
