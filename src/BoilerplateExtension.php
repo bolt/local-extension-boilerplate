@@ -3,6 +3,8 @@
 namespace Local\Boilerplate;
 
 use Bolt\Extension\SimpleExtension;
+use Bolt\Filesystem\Adapter\Local;
+use Bolt\Filesystem\Filesystem;
 use Bolt\Menu\MenuEntry;
 use Silex\Application;
 use Silex\ControllerCollection;
@@ -27,11 +29,15 @@ class BoilerplateExtension extends SimpleExtension
         ];
     }
 
-    protected function registerTwigPaths()
+    /**
+     * Set the base path for our extension, so Bolt can find the templates.
+     *
+     * @return \Bolt\Filesystem\Handler\DirectoryInterface|\Bolt\Filesystem\Handler\HandlerInterface
+     */
+    public function getBaseDirectory()
     {
-        return [
-            '../templates/',
-        ];
+        $fs = new Filesystem(new Local(dirname(__DIR__)));
+        return $fs->getDir('/');
     }
 
     /**
@@ -152,7 +158,7 @@ class BoilerplateExtension extends SimpleExtension
             'title' => "This is my extension."
         ];
 
-        return $this->renderTemplate('frontendcontroller.twig');
+        return $this->renderTemplate('frontendcontroller.twig', $context);
     }
 
     /**
