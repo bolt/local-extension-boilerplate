@@ -1,6 +1,6 @@
 <?php
 
-namespace Boilerplate;
+namespace Local\Boilerplate;
 
 use Bolt\Extension\SimpleExtension;
 use Bolt\Menu\MenuEntry;
@@ -24,6 +24,13 @@ class BoilerplateExtension extends SimpleExtension
         return [
             'foo' => 'bar',
             'qux' => 'baz'
+        ];
+    }
+
+    protected function registerTwigPaths()
+    {
+        return [
+            '../templates/',
         ];
     }
 
@@ -141,7 +148,11 @@ class BoilerplateExtension extends SimpleExtension
      */
     public function frontendControllerFoo(Application $app, Request $request)
     {
-        return new Response('Drop bear sighted!', Response::HTTP_OK);
+        $context = [
+            'title' => "This is my extension."
+        ];
+
+        return $this->renderTemplate('frontendcontroller.twig');
     }
 
     /**
@@ -156,10 +167,10 @@ class BoilerplateExtension extends SimpleExtension
     {
         if ($request->isMethod('POST')) {
             // Handle the POST data
-            return new Response('Thanks, Kenny', Response::HTTP_OK);
+            return new Response('Thanks for POST-ing!', Response::HTTP_OK);
         }
 
-        return new Response('Welcome to your admin page, Kenny', Response::HTTP_OK);
+        return new Response('Welcome to your admin page.', Response::HTTP_OK);
     }
 
 }
