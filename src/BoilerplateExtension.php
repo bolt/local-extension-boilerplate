@@ -3,8 +3,6 @@
 namespace Local\Boilerplate;
 
 use Bolt\Extension\SimpleExtension;
-use Bolt\Filesystem\Adapter\Local;
-use Bolt\Filesystem\Filesystem;
 use Bolt\Menu\MenuEntry;
 use Silex\Application;
 use Silex\ControllerCollection;
@@ -13,6 +11,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BoilerplateExtension extends SimpleExtension
 {
+    /**
+     * Before handler that sets the global variables in Twig, if any.
+     *
+     * @param Request     $request
+     * @param Application $app
+     */
+    public function before(Request $request, Application $app)
+    {
+        $this->registerTwigGlobal($app);
+    }
 
     /**
      * Set up the default configuration.
@@ -27,17 +35,6 @@ class BoilerplateExtension extends SimpleExtension
             'foo' => 'bar',
             'qux' => 'baz'
         ];
-    }
-
-    /**
-     * Set the base path for our extension, so Bolt can find the templates.
-     *
-     * @return \Bolt\Filesystem\Handler\DirectoryInterface|\Bolt\Filesystem\Handler\HandlerInterface
-     */
-    public function getBaseDirectory()
-    {
-        $fs = new Filesystem(new Local(dirname(__DIR__)));
-        return $fs->getDir('/');
     }
 
     /**
@@ -82,14 +79,12 @@ class BoilerplateExtension extends SimpleExtension
      */
     protected function registerBackendRoutes(ControllerCollection $collection)
     {
-        // GET requests on the /bolt/extensions/koala route
+        // GET requests on the /bolt/extensions/foo route
         $collection->get('/extensions/foo', [$this, 'backendControllerFoo']);
 
-        // POST requests on the /bolt/extensions/koala route
+        // POST requests on the /bolt/extensions/foo route
         $collection->post('/extensions/foo', [$this, 'backendControllerFoo']);
     }
-
-
 
     /**
      * Register twig functions to be used in templates.
@@ -122,6 +117,23 @@ class BoilerplateExtension extends SimpleExtension
     }
 
     /**
+     * Register twig global
+     *
+     * @param Application $app
+     */
+    private function registerTwigGlobal(Application $app)
+    {
+        $app['twig'] = $app->extend(
+            'twig',
+            function (\Twig_Environment $twig) {
+                $twig->addGlobal('globalfoo', 'globalbar');
+
+                return $twig;
+            }
+        );
+    }
+    
+    /**
      * Render and return the Twig file templates/foo.twig
      *
      * @return string
@@ -143,14 +155,13 @@ class BoilerplateExtension extends SimpleExtension
         return strtolower($input);
     }
 
-
     /**
      * Controller - Callback function for frontend route
      *
      * @param Application $app
-     * @param Request     $request
+     * @param Request $request
      *
-     * @return Response
+     * @return string
      */
     public function frontendControllerFoo(Application $app, Request $request)
     {
@@ -178,5 +189,4 @@ class BoilerplateExtension extends SimpleExtension
 
         return new Response('Welcome to your admin page.', Response::HTTP_OK);
     }
-
 }
