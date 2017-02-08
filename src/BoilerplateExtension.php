@@ -132,7 +132,7 @@ class BoilerplateExtension extends SimpleExtension
             }
         );
     }
-    
+
     /**
      * Render and return the Twig file templates/foo.twig
      *
