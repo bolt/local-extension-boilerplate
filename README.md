@@ -17,4 +17,4 @@ After this, your local extension is ready, and you can start editing it.
 
 Note that you might need to add `extensions/local` to the Autoloader, as described in the [Bolt documentation][bundled]. 
 
-[bundled]: https://docs.bolt.cm/3.3/howto/installing-bundled-extensions
+[bundled]: https://docs.bolt.cm/extensions/bundled/introduction
